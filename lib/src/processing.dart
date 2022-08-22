@@ -189,7 +189,7 @@ class TransmissionProcessor implements Processor {
   Future<void> _transmit({
     required List<ContextualTelemetryItem> contextualTelemetry,
   }) async {
-    logger.fine('[${DateTime.now()}] Transmitting ${contextualTelemetry.length} telemetry items');
+    logger.fine('Transmitting ${contextualTelemetry.length} telemetry items');
 
     final serialized = _serializeTelemetry(
       contextualTelemetry: contextualTelemetry,
@@ -206,10 +206,10 @@ class TransmissionProcessor implements Processor {
       final result = response.statusCode >= 200 && response.statusCode < 300;
 
       if (!result) {
-        logger.severe('[${DateTime.now()}] Failed to submit telemetry: ${response.statusCode}');
+        logger.severe('Failed to submit telemetry: ${response.statusCode}');
       }
     } on Object catch (e) {
-      logger.warning('[${DateTime.now()}] Failed to submit telemetry: $e');
+      logger.warning('Failed to submit telemetry: $e');
     }
   }
 
@@ -229,11 +229,9 @@ class TransmissionProcessor implements Processor {
   Map<String, dynamic> _serializeTelemetryItem({
     required ContextualTelemetryItem contextualTelemetry,
   }) {
-    final serializedTelemetry = contextualTelemetry.telemetryItem
-        .serialize(context: contextualTelemetry.context);
+    final serializedTelemetry = contextualTelemetry.telemetryItem.serialize(context: contextualTelemetry.context);
     final contextProperties = contextualTelemetry.context.properties;
-    final serializedContext =
-        contextProperties.isEmpty ? null : contextProperties;
+    final serializedContext = contextProperties.isEmpty ? null : contextProperties;
     final result = <String, dynamic>{
       'name': contextualTelemetry.telemetryItem.envelopeName,
       'time': contextualTelemetry.telemetryItem.timestamp.toIso8601String(),
@@ -270,14 +268,12 @@ class DebugProcessor implements Processor {
   void process({
     required List<ContextualTelemetryItem> contextualTelemetryItems,
   }) {
-    logger
-        .info('[${DateTime.now()}] Processing ${contextualTelemetryItems.length} telemetry items:');
+    logger.info('Processing ${contextualTelemetryItems.length} telemetry items:');
 
     for (final contextualTelemetryItem in contextualTelemetryItems) {
-      final json = jsonEncode(contextualTelemetryItem.telemetryItem
-          .serialize(context: contextualTelemetryItem.context));
-      logger.info(
-          '  - ${contextualTelemetryItem.telemetryItem.runtimeType}: $json');
+      final json =
+          jsonEncode(contextualTelemetryItem.telemetryItem.serialize(context: contextualTelemetryItem.context));
+      logger.info('  - ${contextualTelemetryItem.telemetryItem.runtimeType}: $json');
     }
 
     next?.process(
@@ -288,7 +284,7 @@ class DebugProcessor implements Processor {
   /// Outputs a message, then forwards onto [next].
   @override
   Future<void> flush() async {
-    logger.info('[${DateTime.now()}] Flushing');
+    logger.info('Flushing');
     await next?.flush();
   }
 }
