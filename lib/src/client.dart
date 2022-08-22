@@ -146,6 +146,34 @@ class TelemetryClient {
         ),
       );
 
+  /// Creates a [DependencyTelemetryItem] item and forwards it onto the [processor].
+  void trackDependency({
+    required String target,
+    required String name,
+    required String responseCode,
+    Duration? duration,
+    String? id,
+    String? type,
+    String? data,
+    bool? success,
+    Map<String, Object> additionalProperties = const <String, Object>{},
+    DateTime? timestamp,
+  }) =>
+      _track(
+        DependencyTelemetryItem(
+          target: target,
+          name: name,
+          responseCode: responseCode,
+          duration: duration,
+          id: id,
+          type: type,
+          data: data,
+          success: success,
+          additionalProperties: additionalProperties,
+          timestamp: timestamp,
+        ),
+      );
+
   void _track(TelemetryItem telemetry) {
     // We clone the context at this point so that any mutations prior to processing do not affect the outcome.
     final contextualTelemetry = ContextualTelemetryItem(
