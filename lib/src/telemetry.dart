@@ -103,8 +103,7 @@ class ExceptionTelemetryItem implements TelemetryItem {
   Map<String, dynamic> serialize({
     required TelemetryContext context,
   }) {
-    final trace =
-        stackTrace == null ? null : Trace.parse(stackTrace.toString());
+    final trace = stackTrace == null ? null : Trace.parse(stackTrace.toString());
     return <String, dynamic>{
       'baseType': 'ExceptionData',
       'baseData': <String, dynamic>{
@@ -124,8 +123,7 @@ class ExceptionTelemetryItem implements TelemetryItem {
 
   String _generateProblemId(Trace? trace) {
     // Make a best effort at disambiguating errors by using the error message and the first frame from any available stack trace.
-    final code =
-        '$error${trace == null || trace.frames.isEmpty ? '' : trace.frames[0].toString()}';
+    final code = '$error${trace == null || trace.frames.isEmpty ? '' : trace.frames[0].toString()}';
     final codeBytes = utf8.encode(code);
     final hash = sha1.convert(codeBytes);
     final result = hash.toString();
@@ -321,6 +319,74 @@ class TraceTelemetryItem implements TelemetryItem {
           }
         },
       };
+}
+
+// http://davidbanks.blog/Posts/redirectingApplicationInsights#availability-dependency-request
+/// Represents a dependency telemetry item in Application Insights.
+@immutable
+class DependencyTelemetryItem implements TelemetryItem {
+  /// Creates an instance of [DependencyTelemetryItem] with the specified [target], [name], [duration], [responseCode].
+  DependencyTelemetryItem({
+    required this.target,
+    required this.name,
+    required this.responseCode,
+    this.duration,
+    this.id,
+    this.type,
+    this.data,
+    this.success,
+    this.additionalProperties = const <String, Object>{},
+    DateTime? timestamp,
+  })  : assert(timestamp == null || timestamp.isUtc),
+        timestamp = timestamp ?? DateTime.now().toUtc();
+
+  @override
+  String get envelopeName => 'AppDependencies';
+
+  @override
+  final DateTime timestamp;
+
+  final String target;
+
+  final String name;
+
+  final String responseCode;
+
+  final Duration? duration;
+
+  final String? id;
+
+  final String? type;
+
+  final String? data;
+
+  final bool? success;
+
+  final Map<String, Object> additionalProperties;
+
+  @override
+  Map<String, dynamic> serialize({required TelemetryContext context}) {
+    final result = <String, dynamic>{
+      'baseType': 'RemoteDependencyData',
+      'baseData': <String, dynamic>{
+        'ver': 2,
+        'target': target,
+        'name': name,
+        'duration': duration != null ? formatDurationForDotNet(duration) : formatDurationForDotNet(Duration.zero),
+        'responseCode': responseCode,
+        if (id != null) 'id': id,
+        if (type != null) 'type': type,
+        if (data != null) 'data': data,
+        if (success != null) 'success': success,
+        'properties': <String, dynamic>{
+          ...context.properties,
+          ...additionalProperties,
+        }
+      },
+    };
+
+    return result;
+  }
 }
 
 /// Defines severity levels for relevant telemetry items.

@@ -189,7 +189,7 @@ class TransmissionProcessor implements Processor {
   Future<void> _transmit({
     required List<ContextualTelemetryItem> contextualTelemetry,
   }) async {
-    logger.fine('Transmitting ${contextualTelemetry.length} telemetry items');
+    logger.fine('[${DateTime.now()}] Transmitting ${contextualTelemetry.length} telemetry items');
 
     final serialized = _serializeTelemetry(
       contextualTelemetry: contextualTelemetry,
@@ -206,10 +206,10 @@ class TransmissionProcessor implements Processor {
       final result = response.statusCode >= 200 && response.statusCode < 300;
 
       if (!result) {
-        logger.severe('Failed to submit telemetry: ${response.statusCode}');
+        logger.severe('[${DateTime.now()}] Failed to submit telemetry: ${response.statusCode}');
       }
     } on Object catch (e) {
-      logger.warning('Failed to submit telemetry: $e');
+      logger.warning('[${DateTime.now()}] Failed to submit telemetry: $e');
     }
   }
 
@@ -271,7 +271,7 @@ class DebugProcessor implements Processor {
     required List<ContextualTelemetryItem> contextualTelemetryItems,
   }) {
     logger
-        .info('Processing ${contextualTelemetryItems.length} telemetry items:');
+        .info('[${DateTime.now()}] Processing ${contextualTelemetryItems.length} telemetry items:');
 
     for (final contextualTelemetryItem in contextualTelemetryItems) {
       final json = jsonEncode(contextualTelemetryItem.telemetryItem
@@ -288,7 +288,7 @@ class DebugProcessor implements Processor {
   /// Outputs a message, then forwards onto [next].
   @override
   Future<void> flush() async {
-    logger.info('Flushing');
+    logger.info('[${DateTime.now()}] Flushing');
     await next?.flush();
   }
 }
