@@ -9,6 +9,7 @@ void main() {
   _pageViewTelemetry();
   _requestTelemetry();
   _traceTelemetry();
+  _dependencyTelemetry();
 }
 
 void _verifyDataMap({
@@ -325,4 +326,71 @@ void _traceTelemetry() {
       );
     },
   );
+}
+
+void _dependencyTelemetry() {
+  group('DependencyTelemetry', () {
+    test('getDataMap', () {
+      _verifyDataMap(
+        telemetry: DependencyTelemetryItem(
+          target: 'dependency target',
+          name: 'dependency name',
+          responseCode: '200',
+        ),
+        context: TelemetryContext(),
+        expectedJson:
+            '{"baseType":"RemoteDependencyData","baseData":{"ver":2,"target":"dependency target","name":"dependency name","duration":"00:00:00","responseCode":"200","properties":{}}}',
+      );
+
+      _verifyDataMap(
+        telemetry: DependencyTelemetryItem(
+          target: 'dependency target',
+          name: 'dependency name',
+          responseCode: '500',
+          duration: const Duration(seconds: 3),
+        ),
+        context: TelemetryContext(),
+        expectedJson:
+            '{"baseType":"RemoteDependencyData","baseData":{"ver":2,"target":"dependency target","name":"dependency name","duration":"00:00:03","responseCode":"500","properties":{}}}',
+      );
+
+      _verifyDataMap(
+        telemetry: DependencyTelemetryItem(
+          target: 'dependency target',
+          name: 'dependency name',
+          responseCode: '500',
+          duration: const Duration(seconds: 3),
+          id: 'id',
+          type: 'HTTP',
+          data: 'data',
+          success: true,
+          additionalProperties: const <String, Object>{
+            'another': 1,
+          },
+        ),
+        context: TelemetryContext(),
+        expectedJson:
+            '{"baseType":"RemoteDependencyData","baseData":{"ver":2,"target":"dependency target","name":"dependency name","duration":"00:00:03","responseCode":"500","id":"id","type":"HTTP","data":"data","success":true,"properties":{"another":1}}}',
+      );
+
+      _verifyDataMap(
+        telemetry: DependencyTelemetryItem(
+          target: 'dependency target',
+          name: 'dependency name',
+          responseCode: 'error',
+          duration: const Duration(seconds: 3),
+          id: 'id',
+          type: 'Other',
+          data: 'data',
+          success: false,
+          additionalProperties: const <String, Object>{
+            'another': 1,
+          },
+        ),
+        context: TelemetryContext(),
+        expectedJson:
+            '{"baseType":"RemoteDependencyData","baseData":{"ver":2,"target":"dependency target","name":"dependency name","duration":"00:00:03","responseCode":"error","id":"id","type":"Other","data":"data","success":false,"properties":{"another":1}}}',
+      );
+    });
+  });
 }
