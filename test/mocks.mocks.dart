@@ -88,6 +88,7 @@ class MockProcessor extends _i1.Mock implements _i2.Processor {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   _i5.Future<void> flush() => (super.noSuchMethod(
         Invocation.method(
@@ -112,26 +113,31 @@ class MockResponse extends _i1.Mock implements _i4.Response {
         Invocation.getter(#bodyBytes),
         returnValue: _i6.Uint8List(0),
       ) as _i6.Uint8List);
+
   @override
   String get body => (super.noSuchMethod(
         Invocation.getter(#body),
         returnValue: '',
       ) as String);
+
   @override
   int get statusCode => (super.noSuchMethod(
         Invocation.getter(#statusCode),
         returnValue: 0,
       ) as int);
+
   @override
   Map<String, String> get headers => (super.noSuchMethod(
         Invocation.getter(#headers),
         returnValue: <String, String>{},
       ) as Map<String, String>);
+
   @override
   bool get isRedirect => (super.noSuchMethod(
         Invocation.getter(#isRedirect),
         returnValue: false,
       ) as bool);
+
   @override
   bool get persistentConnection => (super.noSuchMethod(
         Invocation.getter(#persistentConnection),
@@ -155,6 +161,7 @@ class MockTelemetryClient extends _i1.Mock implements _i7.TelemetryClient {
           Invocation.getter(#processor),
         ),
       ) as _i2.Processor);
+
   @override
   _i3.TelemetryContext get context => (super.noSuchMethod(
         Invocation.getter(#context),
@@ -163,6 +170,7 @@ class MockTelemetryClient extends _i1.Mock implements _i7.TelemetryClient {
           Invocation.getter(#context),
         ),
       ) as _i3.TelemetryContext);
+
   @override
   void trackError({
     required _i8.Severity? severity,
@@ -187,6 +195,7 @@ class MockTelemetryClient extends _i1.Mock implements _i7.TelemetryClient {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   void trackEvent({
     required String? name,
@@ -205,6 +214,7 @@ class MockTelemetryClient extends _i1.Mock implements _i7.TelemetryClient {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   void trackPageView({
     required String? name,
@@ -229,6 +239,7 @@ class MockTelemetryClient extends _i1.Mock implements _i7.TelemetryClient {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   void trackRequest({
     required String? id,
@@ -259,6 +270,7 @@ class MockTelemetryClient extends _i1.Mock implements _i7.TelemetryClient {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   void trackTrace({
     required _i8.Severity? severity,
@@ -279,6 +291,40 @@ class MockTelemetryClient extends _i1.Mock implements _i7.TelemetryClient {
         ),
         returnValueForMissingStub: null,
       );
+
+  @override
+  void trackDependency({
+    required String? target,
+    required String? name,
+    required String? responseCode,
+    Duration? duration,
+    String? id,
+    String? type,
+    String? data,
+    bool? success,
+    Map<String, Object>? additionalProperties = const {},
+    DateTime? timestamp,
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #trackDependency,
+          [],
+          {
+            #target: target,
+            #name: name,
+            #responseCode: responseCode,
+            #duration: duration,
+            #id: id,
+            #type: type,
+            #data: data,
+            #success: success,
+            #additionalProperties: additionalProperties,
+            #timestamp: timestamp,
+          },
+        ),
+        returnValueForMissingStub: null,
+      );
+
   @override
   _i5.Future<void> flush() => (super.noSuchMethod(
         Invocation.method(
@@ -318,6 +364,7 @@ class MockClientBase extends _i1.Mock implements _i4.Client {
           ),
         )),
       ) as _i5.Future<_i4.Response>);
+
   @override
   _i5.Future<_i4.Response> get(
     Uri? url, {
@@ -338,6 +385,7 @@ class MockClientBase extends _i1.Mock implements _i4.Client {
           ),
         )),
       ) as _i5.Future<_i4.Response>);
+
   @override
   _i5.Future<_i4.Response> post(
     Uri? url, {
@@ -368,6 +416,7 @@ class MockClientBase extends _i1.Mock implements _i4.Client {
           ),
         )),
       ) as _i5.Future<_i4.Response>);
+
   @override
   _i5.Future<_i4.Response> put(
     Uri? url, {
@@ -398,6 +447,7 @@ class MockClientBase extends _i1.Mock implements _i4.Client {
           ),
         )),
       ) as _i5.Future<_i4.Response>);
+
   @override
   _i5.Future<_i4.Response> patch(
     Uri? url, {
@@ -428,6 +478,7 @@ class MockClientBase extends _i1.Mock implements _i4.Client {
           ),
         )),
       ) as _i5.Future<_i4.Response>);
+
   @override
   _i5.Future<_i4.Response> delete(
     Uri? url, {
@@ -458,6 +509,7 @@ class MockClientBase extends _i1.Mock implements _i4.Client {
           ),
         )),
       ) as _i5.Future<_i4.Response>);
+
   @override
   _i5.Future<String> read(
     Uri? url, {
@@ -471,6 +523,7 @@ class MockClientBase extends _i1.Mock implements _i4.Client {
         ),
         returnValue: _i5.Future<String>.value(''),
       ) as _i5.Future<String>);
+
   @override
   _i5.Future<_i6.Uint8List> readBytes(
     Uri? url, {
@@ -484,6 +537,7 @@ class MockClientBase extends _i1.Mock implements _i4.Client {
         ),
         returnValue: _i5.Future<_i6.Uint8List>.value(_i6.Uint8List(0)),
       ) as _i5.Future<_i6.Uint8List>);
+
   @override
   _i5.Future<_i4.StreamedResponse> send(_i4.BaseRequest? request) =>
       (super.noSuchMethod(
@@ -500,6 +554,7 @@ class MockClientBase extends _i1.Mock implements _i4.Client {
           ),
         )),
       ) as _i5.Future<_i4.StreamedResponse>);
+
   @override
   void close() => super.noSuchMethod(
         Invocation.method(
@@ -527,21 +582,25 @@ class MockStreamedResponseBase extends _i1.Mock
           Invocation.getter(#stream),
         ),
       ) as _i4.ByteStream);
+
   @override
   int get statusCode => (super.noSuchMethod(
         Invocation.getter(#statusCode),
         returnValue: 0,
       ) as int);
+
   @override
   Map<String, String> get headers => (super.noSuchMethod(
         Invocation.getter(#headers),
         returnValue: <String, String>{},
       ) as Map<String, String>);
+
   @override
   bool get isRedirect => (super.noSuchMethod(
         Invocation.getter(#isRedirect),
         returnValue: false,
       ) as bool);
+
   @override
   bool get persistentConnection => (super.noSuchMethod(
         Invocation.getter(#persistentConnection),
