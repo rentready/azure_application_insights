@@ -4,6 +4,7 @@ set -e
 
 echo 'Starting test coverage...' && \
 
+dart run build_runner build --delete-conflicting-outputs && \
 dart test --coverage=coverage && \
 format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib && \
 lcov --remove coverage/lcov.info -o coverage/lcov-full.info --ignore-errors unused && \
