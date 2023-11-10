@@ -178,6 +178,7 @@ class MockTelemetryClient extends _i1.Mock implements _i7.TelemetryClient {
     StackTrace? stackTrace,
     String? problemId,
     Map<String, Object>? additionalProperties = const {},
+    String? customErrorType,
     DateTime? timestamp,
   }) =>
       super.noSuchMethod(
@@ -190,6 +191,7 @@ class MockTelemetryClient extends _i1.Mock implements _i7.TelemetryClient {
             #stackTrace: stackTrace,
             #problemId: problemId,
             #additionalProperties: additionalProperties,
+            #customErrorType: customErrorType,
             #timestamp: timestamp,
           },
         ),

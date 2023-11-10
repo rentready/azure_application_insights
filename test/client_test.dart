@@ -85,6 +85,41 @@ void _trackError() {
           );
         },
       );
+
+      test(
+        'creates exception telemetry with the custom error and forwards to processor',
+        () {
+          final processor = MockProcessor();
+          final sut = TelemetryClient(processor: processor);
+          sut.trackError(
+              severity: Severity.critical,
+              error: 'an error',
+              customErrorType: 'CustomStringError');
+
+          expect(
+            verify(processor.process(
+                    contextualTelemetryItems:
+                        captureAnyNamed('contextualTelemetryItems')))
+                .captured
+                .single,
+            predicate<List<ContextualTelemetryItem>>((v) {
+              if (v.length != 1) {
+                return false;
+              }
+
+              final telemetry = v[0].telemetryItem;
+
+              if (telemetry is ExceptionTelemetryItem) {
+                return telemetry.severity == Severity.critical &&
+                    telemetry.error == 'an error' &&
+                    telemetry.customErrorType == 'CustomStringError';
+              }
+
+              return false;
+            }),
+          );
+        },
+      );
     },
   );
 }

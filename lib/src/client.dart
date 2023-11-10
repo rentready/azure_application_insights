@@ -57,6 +57,7 @@ class TelemetryClient {
     StackTrace? stackTrace,
     String? problemId,
     Map<String, Object> additionalProperties = const <String, Object>{},
+    String? customErrorType,
     DateTime? timestamp,
   }) =>
       _track(
@@ -67,6 +68,7 @@ class TelemetryClient {
           problemId: problemId,
           additionalProperties: additionalProperties,
           timestamp: timestamp,
+          customErrorType: customErrorType,
         ),
       );
 

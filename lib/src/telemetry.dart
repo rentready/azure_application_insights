@@ -73,6 +73,7 @@ class ExceptionTelemetryItem implements TelemetryItem {
     this.stackTrace,
     this.problemId,
     this.additionalProperties = const <String, Object>{},
+    this.customErrorType,
     DateTime? timestamp,
   })  : assert(timestamp == null || timestamp.isUtc),
         timestamp = timestamp ?? DateTime.now().toUtc();
@@ -99,11 +100,17 @@ class ExceptionTelemetryItem implements TelemetryItem {
   /// Any additional properties to submit with the telemetry.
   final Map<String, Object> additionalProperties;
 
+  /// An optional field that represents the error/exception type.
+  /// This field can be used in situations where there is no other way to get the "runtimeType" field.
+  /// It can be used together with the "error" field.
+  final String? customErrorType;
+
   @override
   Map<String, dynamic> serialize({
     required TelemetryContext context,
   }) {
-    final trace = stackTrace == null ? null : Trace.parse(stackTrace.toString());
+    final trace =
+        stackTrace == null ? null : Trace.parse(stackTrace.toString());
     return <String, dynamic>{
       'baseType': 'ExceptionData',
       'baseData': <String, dynamic>{
@@ -123,7 +130,8 @@ class ExceptionTelemetryItem implements TelemetryItem {
 
   String _generateProblemId(Trace? trace) {
     // Make a best effort at disambiguating errors by using the error message and the first frame from any available stack trace.
-    final code = '$error${trace == null || trace.frames.isEmpty ? '' : trace.frames[0].toString()}';
+    final code =
+        '$error${trace == null || trace.frames.isEmpty ? '' : trace.frames[0].toString()}';
     final codeBytes = utf8.encode(code);
     final hash = sha1.convert(codeBytes);
     final result = hash.toString();
@@ -131,7 +139,7 @@ class ExceptionTelemetryItem implements TelemetryItem {
   }
 
   Map<String, dynamic> _getErrorDataMap(Trace? trace) => <String, dynamic>{
-        'typeName': error.runtimeType.toString(),
+        'typeName': customErrorType ?? error.runtimeType.toString(),
         'message': error.toString(),
         'hasFullStack': trace != null,
         if (trace != null && trace.frames.isNotEmpty)
@@ -372,7 +380,9 @@ class DependencyTelemetryItem implements TelemetryItem {
         'ver': 2,
         'target': target,
         'name': name,
-        'duration': duration != null ? formatDurationForDotNet(duration) : formatDurationForDotNet(Duration.zero),
+        'duration': duration != null
+            ? formatDurationForDotNet(duration)
+            : formatDurationForDotNet(Duration.zero),
         'responseCode': responseCode,
         if (id != null) 'id': id,
         if (type != null) 'type': type,
