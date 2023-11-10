@@ -13,6 +13,7 @@ void main() {
   _trackPageView();
   _trackRequest();
   _trackTrace();
+  _trackDependency();
   _flush();
 }
 
@@ -284,6 +285,53 @@ void _trackTrace() {
       );
     },
   );
+}
+
+void _trackDependency() {
+  group('trackDependency', () {
+    test('creates dependency telemetry and forwards to processor', () {
+      final processor = MockProcessor();
+      final sut = TelemetryClient(processor: processor);
+      sut.trackDependency(
+        target: 'dependency target',
+        name: 'dependency name',
+        responseCode: '200',
+        duration: const Duration(seconds: 1),
+        id: 'dependency id',
+        type: 'dependency type',
+        data: 'dependency data',
+        success: true,
+      );
+
+      expect(
+        verify(processor.process(
+                contextualTelemetryItems:
+                    captureAnyNamed('contextualTelemetryItems')))
+            .captured
+            .single,
+        predicate<List<ContextualTelemetryItem>>((v) {
+          if (v.length != 1) {
+            return false;
+          }
+
+          final telemetry = v[0].telemetryItem;
+
+          if (telemetry is DependencyTelemetryItem) {
+            return telemetry.target == 'dependency target' &&
+                telemetry.name == 'dependency name' &&
+                telemetry.responseCode == '200' &&
+                telemetry.duration.runtimeType == Duration &&
+                telemetry.id == 'dependency id' &&
+                telemetry.type == 'dependency type' &&
+                telemetry.data == 'dependency data' &&
+                telemetry.success == true;
+          }
+
+          return false;
+        }),
+      );
+    });
+  });
 }
 
 void _flush() {
