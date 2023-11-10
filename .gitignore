@@ -12,3 +12,9 @@ doc/api/
 
 # IDEs
 .idea/
+
+# Test coverage
+coverage/
+
+# Other
+.fvm/
