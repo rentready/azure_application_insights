@@ -120,6 +120,20 @@ void _exceptionTelemetry() {
             expectedJson:
                 '{"baseType":"ExceptionData","baseData":{"ver":2,"severityLevel":4,"exceptions":[{"typeName":"String","message":"an error with properties","hasFullStack":false}],"problemId":"dc7b331564ab7acc456aee1c10e54adc8c710977","properties":{"foo":"bar","another":1}}}',
           );
+
+          _verifyDataMap(
+            telemetry: ExceptionTelemetryItem(
+              severity: Severity.critical,
+              error: 'an error with properties',
+              customErrorType: 'CustomStringError',
+              additionalProperties: const <String, Object>{
+                'another': 1,
+              },
+            ),
+            context: TelemetryContext()..properties['foo'] = 'bar',
+            expectedJson:
+                '{"baseType":"ExceptionData","baseData":{"ver":2,"severityLevel":4,"exceptions":[{"typeName":"CustomStringError","message":"an error with properties","hasFullStack":false}],"problemId":"dc7b331564ab7acc456aee1c10e54adc8c710977","properties":{"foo":"bar","another":1}}}',
+          );
         },
       );
     },
