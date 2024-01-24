@@ -202,6 +202,7 @@ class MockTelemetryClient extends _i1.Mock implements _i7.TelemetryClient {
   void trackEvent({
     required String? name,
     Map<String, Object>? additionalProperties = const {},
+    Map<String, int>? measurements = const {},
     DateTime? timestamp,
   }) =>
       super.noSuchMethod(
@@ -211,6 +212,7 @@ class MockTelemetryClient extends _i1.Mock implements _i7.TelemetryClient {
           {
             #name: name,
             #additionalProperties: additionalProperties,
+            #measurements: measurements,
             #timestamp: timestamp,
           },
         ),

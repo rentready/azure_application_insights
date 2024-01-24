@@ -28,6 +28,7 @@ class EventTelemetryItem implements TelemetryItem {
   EventTelemetryItem({
     required this.name,
     this.additionalProperties = const <String, Object>{},
+    this.measurements = const <String, int>{},
     DateTime? timestamp,
   })  : assert(timestamp == null || timestamp.isUtc),
         timestamp = timestamp ?? DateTime.now().toUtc();
@@ -44,6 +45,9 @@ class EventTelemetryItem implements TelemetryItem {
   /// Any additional properties to submit with the telemetry.
   final Map<String, Object> additionalProperties;
 
+  /// A Collection of custom measurements.
+  final Map<String, int> measurements;
+
   @override
   Map<String, dynamic> serialize({
     required TelemetryContext context,
@@ -56,6 +60,9 @@ class EventTelemetryItem implements TelemetryItem {
           'properties': <String, dynamic>{
             ...context.properties,
             ...additionalProperties,
+          },
+          'measurements': {
+            ...measurements,
           }
         },
       };

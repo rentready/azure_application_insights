@@ -76,12 +76,14 @@ class TelemetryClient {
   void trackEvent({
     required String name,
     Map<String, Object> additionalProperties = const <String, Object>{},
+    Map<String, int> measurements = const <String, int>{},
     DateTime? timestamp,
   }) =>
       _track(
         EventTelemetryItem(
           name: name,
           additionalProperties: additionalProperties,
+          measurements: measurements,
           timestamp: timestamp,
         ),
       );

@@ -37,7 +37,7 @@ void _eventTelemetry() {
             ),
             context: TelemetryContext(),
             expectedJson:
-                '{"baseType":"EventData","baseData":{"ver":2,"name":"SomeEvent","properties":{}}}',
+                '{"baseType":"EventData","baseData":{"ver":2,"name":"SomeEvent","properties":{},"measurements":{}}}',
           );
 
           _verifyDataMap(
@@ -50,7 +50,7 @@ void _eventTelemetry() {
             ),
             context: TelemetryContext()..properties['foo'] = 'bar',
             expectedJson:
-                '{"baseType":"EventData","baseData":{"ver":2,"name":"SomeEvent","properties":{"foo":"bar","another":1}}}',
+                '{"baseType":"EventData","baseData":{"ver":2,"name":"SomeEvent","properties":{"foo":"bar","another":1},"measurements":{}}}',
           );
         },
       );
